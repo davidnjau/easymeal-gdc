@@ -8,9 +8,8 @@ data class LoginResponse(
 
         val accessToken:String,
         val userId:String,
-        val firstName:String,
+        val name:String,
         val emailAddress:String,
-        val lastName:String,
         val phoneNumber:String,
         val roles:List<String>,
 )

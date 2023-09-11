@@ -6,8 +6,8 @@ import com.easymeal.easymealgdc.authentication.entity.Role;
 import com.easymeal.easymealgdc.authentication.filter.JwtTokenAuthenticationFilter;
 import com.easymeal.easymealgdc.authentication.filter.JwtTokenFilter;
 import com.easymeal.easymealgdc.authentication.filter.JwtTokenStore;
+import com.easymeal.easymealgdc.authentication.service_class.service.PersonService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 
 @Configuration
 @EnableWebSecurity
@@ -34,14 +34,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenStore jwtTokenStore;
     private final JwtTokenFilter jwtTokenFilter;
-
-    @Autowired
-    private StaffDetailsServiceImpl staffDetailsServiceImpl;
+    private final PersonService personService;
 
 
-    public SecurityConfig(JwtTokenStore jwtTokenStore, JwtTokenFilter jwtTokenFilter ) {
+    public SecurityConfig(JwtTokenStore jwtTokenStore, JwtTokenFilter jwtTokenFilter, PersonService personService) {
         this.jwtTokenStore = jwtTokenStore;
         this.jwtTokenFilter = jwtTokenFilter;
+        this.personService = personService;
     }
 
     @Override
@@ -102,30 +101,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         try {
             String token = jwtTokenStore.generateToken( authentication );
             String emailAddress = authentication.getName();
-            PersonDetails userDetails = staffDetailsServiceImpl
-                    .getStaffDetailsByEmailAddress(emailAddress);
-            String userId = userDetails.getUserId();
-            String firstName = userDetails.getFirstName();
-            String lastName = userDetails.getLastName();
-            String phoneNumber = userDetails.getPhoneNumber();
+            PersonDetails userDetails = personService
+                    .getPersonByEmailAddress(emailAddress);
+            if (userDetails != null){
+                String userId = userDetails.getUserId();
+                String name = userDetails.getPersonName();
+                String phoneNumber = userDetails.getPhoneNumber();
 
+                LoginResponse loginResponse = new LoginResponse(
+                        token, userId, name, emailAddress, phoneNumber,
 
-            LoginResponse loginResponse = new LoginResponse(
-                    token, userId, firstName, emailAddress, lastName, phoneNumber,
+                        userDetails.getRolesCollection().stream()
+                                .map(Role::getName)
+                                .collect(Collectors.toList())
 
-                    userDetails.getRolesCollection().stream()
-                    .map(Role::getName)
-                    .collect(Collectors.toList())
+                );
 
-            );
+                response.setContentType(APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(), loginResponse);
 
-            response.setContentType(APPLICATION_JSON_VALUE);
-            new ObjectMapper().writeValue(response.getOutputStream(), loginResponse);
+            }
 
 
         } catch ( Exception e ) {
             e.printStackTrace();
-
         }
     }
 
