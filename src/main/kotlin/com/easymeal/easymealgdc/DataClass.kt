@@ -36,3 +36,18 @@ data class DbPasswordChange(
         val confirmPassword:String,
         val otpPassword:String
 )
+data class DbDepartment(
+        val name:String
+)
+data class DbPositions(
+        val name:String,
+        val departmentId:String
+)
+data class DbAddStaff(
+        val name: String,
+        val phoneNumber: String,
+        val emailAddress: String,
+        val profileUrl: String,
+        val departmentId: String,
+        val positionId: String,
+)
