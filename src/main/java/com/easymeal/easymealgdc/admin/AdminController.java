@@ -31,7 +31,7 @@ public class AdminController {
     }
     @DeleteMapping(path = "deactivate-staff")
     public ResponseEntity<?> deactivateStaff(String staffId){
-        Results results = adminService.deactivateStaff("");
+        Results results = adminService.deactivateStaff(staffId);
         return formatterHelper.getResponseEntity(results);
     }
     @RequestMapping(value = "statistics", method = {RequestMethod.GET})
