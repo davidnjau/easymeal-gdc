@@ -1,0 +1,48 @@
+server:
+  port:
+    9001
+
+file:
+  upload-dir:
+    /var/www/upload/
+
+spring:
+  servlet:
+    multipart:
+      file-size-threshold:
+        2KB
+      max-file-size:
+        100MB
+      max-request-size:
+        125MB
+
+  datasource:
+    hikari:
+      connection-timeout:
+        60000
+      maximum-pool-size:
+        5
+    url:
+      jdbc:postgresql://192.168.214.100:5000/easy_meal
+    username:
+      easymeal
+    password:
+      kexgSLH$3DeU*sM#
+
+  jpa:
+    properties:
+      hibernate:
+        dialect:
+          org.hibernate.dialect.PostgreSQLDialect
+        format:
+          sql:
+            true
+
+    hibernate:
+      ddl-auto:
+        update
+      enable_lazy_load_nno_trans:
+        true
+
+
+
