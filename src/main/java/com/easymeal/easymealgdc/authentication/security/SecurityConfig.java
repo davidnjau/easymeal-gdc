@@ -49,9 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore( jwtTokenFilter, JwtTokenAuthenticationFilter.class );
         http.csrf().disable().authorizeRequests()
 
-                .antMatchers("/home").permitAll()
+                .antMatchers("/auth/api/v1/**").permitAll()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/register").permitAll()
+                .antMatchers("/auth/api/v1/register-account").permitAll()
 
                 .antMatchers(GET, "/swagger-ui/**").permitAll()
                 .antMatchers(GET, "/swagger-ui.html").permitAll()
@@ -62,7 +62,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(GET, "/actuator/**").permitAll()
                 .antMatchers(GET, "/static/**").permitAll()
                 .antMatchers(GET, "/assets/**").permitAll()
-                .antMatchers("/auth/api/v1/**").permitAll()
 
                 .antMatchers("/login*").permitAll()
 

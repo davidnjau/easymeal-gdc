@@ -2,6 +2,9 @@ package com.easymeal.easymealgdc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class EasymealGdcApplication {
@@ -9,5 +12,11 @@ public class EasymealGdcApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EasymealGdcApplication.class, args);
 	}
+
+	@Bean
+	PasswordEncoder passwordEncoder(){
+		return new BCryptPasswordEncoder();
+	}
+
 
 }

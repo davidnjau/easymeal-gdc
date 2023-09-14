@@ -1,5 +1,7 @@
 package com.easymeal.easymealgdc
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class Results(
         val statusCode: Int,
         val details: Any
@@ -21,7 +23,8 @@ data class DbRegister(
         val emailAddress: String,
         val password: String,
         val confirmPassword:String,
-        val phoneNumber: String
+        val phoneNumber: String,
+        val isStaff: Boolean?
 )
 data class DbLogin(
         val username:String,
@@ -80,4 +83,8 @@ data class DbPaymentDetails(
 data class DbOrderItem(
         val menuItemId:String,
         val quantity:String
+)
+data class DbRole(
+        @JsonProperty("name")
+        val name: String
 )

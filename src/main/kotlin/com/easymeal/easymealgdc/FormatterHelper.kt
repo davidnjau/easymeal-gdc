@@ -6,7 +6,7 @@ import java.util.regex.Pattern
 
 class FormatterHelper {
     fun isValidPhoneNumber(phoneNumber: String): Boolean {
-        val regex = """^\+[1-9]\d{1,14}$""".toRegex()
+        val regex = """^(\+[1-9]\d{1,14}|0\d{9})$""".toRegex()
         return regex.matches(phoneNumber)
     }
     fun getResponseEntity(addedResults: Results): ResponseEntity<*> {
