@@ -11,5 +11,6 @@ public interface AdminService {
     Results addPositions(DbPositions dbPositions);
     Results addStaff(DbAddStaff dbAddStaff);
     Results deactivateStaff(String staffId);
+    Results getStats(int limit, int page);
 
 }

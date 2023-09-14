@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/orders/api/v1/")
-class OrdersController(private val orderService: OrderService, private val formatterHelper: FormatterHelper) {
+class OrdersController(private val orderService: OrderService) {
+
+    private val formatterHelper = FormatterHelper()
 
     @GetMapping("current-orders")
     fun getCurrentOrders(

@@ -34,5 +34,13 @@ public class AdminController {
         Results results = adminService.deactivateStaff("");
         return formatterHelper.getResponseEntity(results);
     }
+    @RequestMapping(value = "statistics", method = {RequestMethod.GET})
+    public ResponseEntity<?> getStats(
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "1") int page
+    ){
+        Results results = adminService.getStats(limit, page);
+        return formatterHelper.getResponseEntity(results);
+    }
 
 }
