@@ -37,17 +37,47 @@ data class DbPasswordChange(
         val otpPassword:String
 )
 data class DbDepartment(
+        val id:String?,
         val name:String
 )
 data class DbPositions(
+        val id:String?,
         val name:String,
         val departmentId:String
 )
 data class DbAddStaff(
+        val id:String?,
         val name: String,
         val phoneNumber: String,
         val emailAddress: String,
         val profileUrl: String,
         val departmentId: String,
         val positionId: String,
+)
+data class DbAddMenu(
+        val id:String?,
+        val name: String,
+        val startPeriod:String,
+        val endPeriod:String
+)
+data class DbAddMenuItems(
+        val id:String?,
+        val name: String,
+        val menuId:String,
+        val imageUrl:String,
+        val price:Int
+)
+data class DbOrder(
+        val total:Int,
+        val orderList:List<DbOrderItem>,
+)
+data class DbPaymentDetails(
+        val orderNumber:String,
+        val paymentType:String,
+        val mpesaCode:String?, //For Manual Payment
+        val phoneNumber: String
+ )
+data class DbOrderItem(
+        val menuItemId:String,
+        val quantity:String
 )
