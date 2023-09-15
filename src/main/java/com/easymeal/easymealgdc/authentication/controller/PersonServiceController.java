@@ -23,7 +23,7 @@ public class PersonServiceController {
 
     @PostMapping(path = "system-register-account")
     public ResponseEntity<?> registerSystemAccount(@RequestBody DbRegister dbRegister){
-        Results results = personService.registerAccount(dbRegister, "SYSTEM");
+        Results results = personService.registerAccount(dbRegister, "ADMIN");
         return formatterHelper.getResponseEntity(results);
     }
     @PostMapping(path = "register-account")

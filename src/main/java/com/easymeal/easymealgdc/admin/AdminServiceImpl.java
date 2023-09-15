@@ -5,7 +5,13 @@ import com.easymeal.easymealgdc.admin.departments.Departments;
 import com.easymeal.easymealgdc.admin.departments.DepartmentsRepository;
 import com.easymeal.easymealgdc.admin.positions.Positions;
 import com.easymeal.easymealgdc.admin.positions.PositionsRepository;
+import com.easymeal.easymealgdc.admin.staff.StaffInfoRepository;
+import com.easymeal.easymealgdc.authentication.entity.PersonDetails;
+import com.easymeal.easymealgdc.admin.staff.StaffInfo;
+import com.easymeal.easymealgdc.authentication.service_class.service.PersonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,6 +22,10 @@ public class AdminServiceImpl implements AdminService{
     private final FormatterHelper formatterHelper = new FormatterHelper();
     private final DepartmentsRepository departmentsRepository;
     private final PositionsRepository positionsRepository;
+    private final StaffInfoRepository staffInfoRepository;
+    private final PersonService personService;
+    @Autowired
+    public JavaMailSender emailSender;
 
     @Override
     public Results addDepartment(DbDepartment dbDepartment) {
@@ -67,6 +77,55 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public Results addStaff(DbAddStaff dbAddStaff) {
+
+        String name = dbAddStaff.getName();
+        String phoneNumber = dbAddStaff.getPhoneNumber();
+        String emailAddress = dbAddStaff.getEmailAddress();
+        String profileUrl = dbAddStaff.getProfileUrl();
+        String departmentId = dbAddStaff.getDepartmentId();
+        String positionId = dbAddStaff.getPositionId();
+
+        Optional<Departments> optionalDepartments = departmentsRepository.findById(departmentId);
+        Optional<Positions> optionalPositions = positionsRepository.findById(positionId);
+
+        if (optionalDepartments.isEmpty()) return new Results(400, "Department is not valid.");
+        if (optionalPositions.isEmpty()) return new Results(400, "Position is not valid.");
+
+        String password = formatterHelper.generateOtp();
+
+        DbRegister dbRegister = new DbRegister(
+                name,
+                emailAddress,
+                password,
+                password,
+                phoneNumber,
+                true);
+
+        Results results = personService.registerAccount(dbRegister, "STAFF");
+        int code = results.getStatusCode();
+        if (code == 201){
+            PersonDetails personDetails = personService.getPersonByEmailAddress(emailAddress);
+            if (personDetails != null){
+                String userId = personDetails.getUserId();
+
+                StaffInfo staffInfo = new StaffInfo();
+                staffInfo.setUserId(userId);
+                staffInfo.setProfileUrl(profileUrl);
+                staffInfo.setPosition(optionalPositions.get());
+
+                staffInfoRepository.save(staffInfo);
+                String subject = "Staff Account";
+                String message = "Use this password to access your account.\n"+password;
+
+                //Send mail
+                formatterHelper.sendOtpMail(
+                        emailSender, emailAddress, message, subject);
+                return new Results(200, new DbResults("Staff registered successfully."));
+
+            }
+        }
+
+
         return null;
     }
 

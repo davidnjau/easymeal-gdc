@@ -65,7 +65,7 @@ public class PersonServiceImpl implements PersonService, RoleService {
     }
 
     @Override
-    public Results registerAccount(DbRegister dbRegister, String type) {
+    public Results registerAccount(DbRegister dbRegister, String role) {
 
         String name = dbRegister.getName();
         String emailAddress = dbRegister.getEmailAddress();
@@ -92,29 +92,21 @@ public class PersonServiceImpl implements PersonService, RoleService {
         String encryptedPassword = passwordEncoder.encode(password);
         personDetails.setPassword(encryptedPassword);
 
-        if (type.equals("SYSTEM")){
-            addSystemUser(personDetails);
-        }else {
-            addUser(personDetails);
-        }
+        addUser(personDetails, role);
 
         return new Results(201, new DbResults("User registered successfully."));
     }
 
 
 
-    private PersonDetails addUser(PersonDetails personDetails){
-        Role roles = getRoleDetails("ROLE_USER");
+    private PersonDetails addUser(PersonDetails personDetails, String role){
+        Role roles = getRoleDetails("ROLE_"+role);
         personDetails.getRolesCollection().add(roles);
         personDetails.setStaff(false);
         return personDetailsRepository.save(personDetails);
     }
-    private PersonDetails addSystemUser(PersonDetails personDetails){
-        Role roles = getRoleDetails("ROLE_ADMIN");
-        personDetails.getRolesCollection().add(roles);
-        personDetails.setStaff(true);
-        return personDetailsRepository.save(personDetails);
-    }
+
+
 
     @Override
     public Results requestPasswordChange(DbRequestPasswordChange dbRequestPasswordChange) {

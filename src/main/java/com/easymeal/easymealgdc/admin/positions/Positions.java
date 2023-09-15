@@ -1,6 +1,7 @@
 package com.easymeal.easymealgdc.admin.positions;
 
 import com.easymeal.easymealgdc.admin.departments.Departments;
+import com.easymeal.easymealgdc.admin.staff.StaffInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Positions {
@@ -35,6 +37,9 @@ public class Positions {
     @JoinColumn(name = "department_id")
     @JsonIgnore // Exclude department from serialization
     private Departments department;
+
+    @OneToMany(mappedBy = "position")
+    private List<StaffInfo> staffInfoList;
 
     public Positions() {
     }
@@ -77,5 +82,13 @@ public class Positions {
 
     public void setDepartment(Departments department) {
         this.department = department;
+    }
+
+    public List<StaffInfo> getStaffInfoList() {
+        return staffInfoList;
+    }
+
+    public void setStaffInfoList(List<StaffInfo> staffInfoList) {
+        this.staffInfoList = staffInfoList;
     }
 }
