@@ -53,20 +53,15 @@ public class AdminServiceImpl implements AdminService{
         Departments departments = getDepartment(departmentId);
         if (departments == null) return new Results(400, "Department is not valid.");
 
+        boolean isName = positionsRepository.existsByName(name);
+        if (isName) return new Results(400, "Position is in the system.");
+
         Positions positions = new Positions();
         positions.setName(name);
         positions.setDepartment(departments);
 
-        if (id != null){
-            //Update
-
-            return new Results(200, dbPositions);
-        }else {
-            //Add
-
-            Positions addedPositions = positionsRepository.save(positions);
-            return new Results(201, addedPositions);
-        }
+        Positions addedPositions = positionsRepository.save(positions);
+        return new Results(201, addedPositions);
 
     }
 
