@@ -8,6 +8,7 @@ import com.easymeal.easymealgdc.authentication.repository.RoleRepository;
 import com.easymeal.easymealgdc.authentication.service_class.service.PersonService;
 import com.easymeal.easymealgdc.authentication.service_class.service.RoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -128,6 +129,28 @@ public class PersonServiceImpl implements PersonService, RoleService {
 
         List<PersonDetails> personDetailsList = personDetailsRepository.findByIsStaff(isStaff);
         return new Results(200, personDetailsList);
+    }
+
+    @Override
+    public PersonDetails getStaffById(String id) {
+
+        Optional<PersonDetails> optionalPersonDetails =
+                personDetailsRepository.findById(id);
+        return optionalPersonDetails.orElse(null);
+
+    }
+
+    @Override
+    public PersonDetails updateDetails(PersonDetails personDetails){
+
+        return personDetailsRepository.findById(personDetails.getUserId())
+                .map(personDetailsOld -> {
+                    personDetailsOld.setPersonName(personDetails.getPersonName());
+                    personDetailsOld.setStaff(personDetails.isStaff());
+
+                    return personDetailsRepository.save(personDetailsOld);
+                }).orElse(null);
+
     }
 
 

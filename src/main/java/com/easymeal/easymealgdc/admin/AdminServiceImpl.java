@@ -174,7 +174,15 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public Results deactivateStaff(String staffId) {
-        return null;
+
+        PersonDetails personDetails = personService.getStaffById(staffId);
+        personDetails.setStaff(false);
+        PersonDetails updatedDetails = personService.updateDetails(personDetails);
+        if (updatedDetails != null){
+            return new Results(200, new DbResults("Staff deactivate successfully."));
+        }
+
+        return new Results(400, "Staff deactivation was not successful.");
     }
 
     @Override

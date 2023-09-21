@@ -12,5 +12,7 @@ public interface PersonService {
     Results requestPasswordChange(DbRequestPasswordChange dbRequestPasswordChange);
     Results changePassword(DbPasswordChange dbPasswordChange);
     Results getStaff(boolean isStaff);
+    PersonDetails getStaffById(String id);
+    PersonDetails updateDetails(PersonDetails personDetails);
 
 }
