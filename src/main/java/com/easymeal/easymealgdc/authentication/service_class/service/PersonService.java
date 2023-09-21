@@ -11,5 +11,6 @@ public interface PersonService {
     Results registerAccount(DbRegister dbRegister, String type);
     Results requestPasswordChange(DbRequestPasswordChange dbRequestPasswordChange);
     Results changePassword(DbPasswordChange dbPasswordChange);
+    Results getStaff(boolean isStaff);
 
 }

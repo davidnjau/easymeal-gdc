@@ -38,7 +38,8 @@ public class Positions {
     @JsonIgnore // Exclude department from serialization
     private Departments department;
 
-    @OneToMany(mappedBy = "position")
+    @OneToMany(mappedBy = "position",orphanRemoval = true)
+    @JsonIgnore // Exclude department from serialization
     private List<StaffInfo> staffInfoList;
 
     public Positions() {

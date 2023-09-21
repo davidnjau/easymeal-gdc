@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,6 +48,23 @@ public class AdminServiceImpl implements AdminService{
 
     }
 
+    @Override
+    public Results viewDepartments(int limit, int page) {
+
+        List<Departments> departmentsList = departmentsRepository.findAll();
+        return new Results(200, departmentsList);
+    }
+
+    @Override
+    public Results deleteDepartment(String departmentId) {
+        Departments departments = getDepartment(departmentId);
+        if (departments == null) return new Results(400, "Department is not valid.");
+
+        departmentsRepository.delete(departments);
+
+        return new Results(200, new DbResults("Department deleted successfully."));
+    }
+
 
     private Departments getDepartment(String id){
         Optional<Departments> optionalDepartments = departmentsRepository.findById(id);
@@ -73,6 +91,15 @@ public class AdminServiceImpl implements AdminService{
         Positions addedPositions = positionsRepository.save(positions);
         return new Results(201, addedPositions);
 
+    }
+
+    @Override
+    public Results viewPositions(int limit, int page, String departmentId) {
+        Departments departments = getDepartment(departmentId);
+        if (departments == null) return new Results(400, "Department is not valid.");
+
+        List<Positions> positionsList = positionsRepository.findByDepartment(departments);
+        return new Results(200, positionsList);
     }
 
     @Override
@@ -137,5 +164,10 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Results getStats(int limit, int page) {
         return null;
+    }
+
+    @Override
+    public Results viewStaff(int limit, int page) {
+        return personService.getStaff(true);
     }
 }

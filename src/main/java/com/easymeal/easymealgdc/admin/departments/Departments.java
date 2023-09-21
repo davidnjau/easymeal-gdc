@@ -37,7 +37,7 @@ public class Departments {
     @UpdateTimestamp
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnoreProperties("department") // Exclude positions from serialization
     private List<Positions> positions;
 

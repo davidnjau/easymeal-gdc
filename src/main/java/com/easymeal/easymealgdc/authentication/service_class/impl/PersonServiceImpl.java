@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -102,7 +103,11 @@ public class PersonServiceImpl implements PersonService, RoleService {
     private PersonDetails addUser(PersonDetails personDetails, String role){
         Role roles = getRoleDetails("ROLE_"+role);
         personDetails.getRolesCollection().add(roles);
-        personDetails.setStaff(false);
+        if (role.equals("STAFF")){
+            personDetails.setStaff(true);
+        }else {
+            personDetails.setStaff(false);
+        }
         return personDetailsRepository.save(personDetails);
     }
 
@@ -116,6 +121,13 @@ public class PersonServiceImpl implements PersonService, RoleService {
     @Override
     public Results changePassword(DbPasswordChange dbPasswordChange) {
         return null;
+    }
+
+    @Override
+    public Results getStaff(boolean isStaff) {
+
+        List<PersonDetails> personDetailsList = personDetailsRepository.findByIsStaff(isStaff);
+        return new Results(200, personDetailsList);
     }
 
 
