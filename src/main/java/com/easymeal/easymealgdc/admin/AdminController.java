@@ -30,6 +30,14 @@ public class AdminController {
         Results results = adminService.viewDepartments(limit, page);
         return formatterHelper.getResponseEntity(results);
     }
+    @RequestMapping(value = "delete-department", method = {RequestMethod.DELETE})
+    public ResponseEntity<?> deleteDepartment(
+            @RequestParam(defaultValue = "") String departmentId
+    ){
+        Results results = adminService.deleteDepartment(departmentId);
+        return formatterHelper.getResponseEntity(results);
+    }
+
     @PostMapping(path = "add-position")
     public ResponseEntity<?> addPositions(@RequestBody DbPositions dbPositions){
         Results results = adminService.addPositions(dbPositions);
@@ -45,11 +53,11 @@ public class AdminController {
         Results results = adminService.viewPositions(limit, page, departmentId);
         return formatterHelper.getResponseEntity(results);
     }
-    @RequestMapping(value = "delete-department", method = {RequestMethod.DELETE})
-    public ResponseEntity<?> deleteDepartment(
-            @RequestParam(defaultValue = "") String departmentId
+    @RequestMapping(value = "delete-position", method = {RequestMethod.DELETE})
+    public ResponseEntity<?> deletePosition(
+            @RequestParam(defaultValue = "") String positionId
     ){
-        Results results = adminService.deleteDepartment(departmentId);
+        Results results = adminService.deletePosition(positionId);
         return formatterHelper.getResponseEntity(results);
     }
 

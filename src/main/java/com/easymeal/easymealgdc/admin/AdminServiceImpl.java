@@ -65,6 +65,22 @@ public class AdminServiceImpl implements AdminService{
         return new Results(200, new DbResults("Department deleted successfully."));
     }
 
+    @Override
+    public Results deletePosition(String positionId) {
+
+        Positions positions = getPosition(positionId);
+        if (positions == null) return new Results(400, "Position is not valid.");
+
+        positionsRepository.delete(positions);
+
+        return new Results(200, new DbResults("Position deleted successfully."));
+    }
+
+    private Positions getPosition(String positionId){
+        Optional<Positions> optionalPositions = positionsRepository.findById(positionId);
+        return optionalPositions.orElse(null);
+    }
+
 
     private Departments getDepartment(String id){
         Optional<Departments> optionalDepartments = departmentsRepository.findById(id);

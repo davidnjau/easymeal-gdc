@@ -10,6 +10,7 @@ public interface AdminService {
     Results addDepartment(DbDepartment dbDepartment);
     Results viewDepartments(int limit, int page);
     Results deleteDepartment(String departmentId);
+    Results deletePosition(String positionId);
 
     Results addPositions(DbPositions dbPositions);
     Results viewPositions(int limit, int page, String departmentId);
