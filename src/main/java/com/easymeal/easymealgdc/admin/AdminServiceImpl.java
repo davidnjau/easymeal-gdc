@@ -168,8 +168,7 @@ public class AdminServiceImpl implements AdminService{
             }
         }
 
-
-        return null;
+        return new Results(400, "Addition of staff is not possible.");
     }
 
     @Override

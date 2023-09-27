@@ -30,12 +30,28 @@ public class KitchenController {
             @RequestParam(defaultValue = "10") int limit,
             @RequestParam(defaultValue = "1") int page
     ){
-        Results results = kitchenService.getMenu(limit, page);
+        Results results = kitchenService.getMenuList(limit, page);
         return formatterHelper.getResponseEntity(results);
     }
 
     @RequestMapping(value = "get-menu/{menuId}", method = {RequestMethod.GET})
-    public ResponseEntity<?> getMenuItem(
+    public ResponseEntity<?> getMenu(
+            @PathVariable("menuId") String menuId
+    ){
+        Results results = kitchenService.getMenuData(menuId);
+        return formatterHelper.getResponseEntity(results);
+    }
+
+    @RequestMapping(value = "get-menu-item-details/{menuId}", method = {RequestMethod.GET})
+    public ResponseEntity<?> getMenuItemDetails(
+            @PathVariable("menuId") String menuId
+    ){
+        Results results = kitchenService.getMenuItemData(menuId);
+        return formatterHelper.getResponseEntity(results);
+    }
+
+    @RequestMapping(value = "get-menu-items/{menuId}", method = {RequestMethod.GET})
+    public ResponseEntity<?> getMenuItems(
             @RequestParam(defaultValue = "10") int limit,
             @RequestParam(defaultValue = "1") int page,
             @PathVariable("menuId") String menuId

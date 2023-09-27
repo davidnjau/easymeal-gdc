@@ -9,6 +9,8 @@ public interface KitchenService {
 
     Results addMenu(DbAddMenu dbAddMenu);
     Results addMenuItems(DbAddMenuItems dbAddMenuItems);
-    Results getMenu(int limit, int pageNo);
+    Results getMenuList(int limit, int pageNo);
     Results getMenuItems(String menuId, int limit, int pageNo);
+    Results getMenuData(String menuId);
+    Results getMenuItemData(String menuId);
 }
